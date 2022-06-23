@@ -1,0 +1,32 @@
+﻿@page "/"
+@*@model UiPatientApp.Pages.Index*@
+
+
+<h2>Komandix</h2>
+
+This is a new innovative app, which helps you to find your medicine for every day!
+
+
+@if (imageSource is not null)
+{
+    <div>
+        <img src="@imageSource" />
+    </div>
+}
+
+@for (var i = 1; i <= 3; i++)
+{
+    var imageId = i;
+    <button @onclick="() => ShowImage(imageId)">
+        Image @imageId
+    </button>
+}
+
+@code {
+    private string? imageSource;
+
+    private void ShowImage(int id)
+    {
+        imageSource = $"images/image{id}.png";
+    }
+}

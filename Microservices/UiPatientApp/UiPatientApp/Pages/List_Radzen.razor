@@ -1,0 +1,23 @@
+﻿@page "/list_radzen"
+@inject IController controller
+@inject IModel model
+
+<h5>Text to search:</h5>
+
+@*<RadzenTextBox Name="searchText" @bind-Value=@model.SearchText Style="width: 160px" />*@
+
+<RadzenButton Icon="search" Text="Search" Click=@controller.SearchDrugsAsync Style="width: 160px" />
+
+<h5 style="margin-top: 16px">Nodes</h5>
+
+<RadzenListBox Name="drugList" Data=@model.DrugList TValue="DrugData" SelectedItem=@model.SelectedDrug Style="width: 324px; height: 240px">
+  <Template Context="drugData">
+    @drugData.Id at (@drugData.Name,@drugData.Type,@drugData.NeedPrescription)
+  </Template>
+</RadzenListBox>
+
+<RadzenMenu>
+  <RadzenMenuItem Text="Add" Icon="add" />
+  <RadzenMenuItem Text="View" Icon="pageview" />
+  <RadzenMenuItem Text="Edit" Icon="edit" />
+</RadzenMenu>

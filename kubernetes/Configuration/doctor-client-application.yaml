@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doctor-client-application-deployment
+  labels:
+    app: doctor-client-application
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: doctor-client-application
+  template:
+    metadata:
+      labels:
+        app: doctor-client-application
+    spec:
+      containers:
+      - name: doctor-client-application
+        image: uaimpw/doctor-client-application-http	
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_URLS
+          value: http://+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: doctor-client-application-service
+spec:
+  selector:
+    app: doctor-client-application
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30007

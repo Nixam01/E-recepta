@@ -1,0 +1,20 @@
+[
+  {
+    "Id": "05b028dd-ed69-4b05-9374-e44dd07f3f04",
+    "Name": "Xanax",
+    "DrugType": "CNS_Stimulant",
+    "NeedPrescription": true
+  },
+  {
+    "Id": "02726ff0-b99b-4a49-b6c8-ca0fef72c52c",
+    "Name": "Rutinoscorbin",
+    "DrugType": "Dietary_Supplement",
+    "NeedPrescription": false
+  },
+  {
+    "Id": "ce166e68-76c1-4839-b2af-7274888da53c",
+    "Name": "Bioracef",
+    "DrugType": "Antibiotic",
+    "NeedPrescription": true
+  }
+]

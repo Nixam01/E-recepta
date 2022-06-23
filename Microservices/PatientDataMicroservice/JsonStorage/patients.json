@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "5608c3c3-c980-4f57-bfbf-ca2f32616ba2",
+    "FirstName": "Philipp",
+    "LastName": "Star",
+    "BirthDate": "06.06.2000",
+    "Email": "phstar@gmail.com",
+    "Pesel": "87071248476"
+  },
+  {
+    "Id": "5064ac01-fbff-478c-b52a-894583450d91",
+    "FirstName": "Paul",
+    "LastName": "Doe",
+    "BirthDate": "08.01.1985",
+    "Email": "pdoe@gmail.com",
+    "Pesel": "48101179872"
+  },
+  {
+    "Id": "dfda9b96-780c-4ae5-9baf-07eb7bc4a2c1",
+    "FirstName": "Jan",
+    "LastName": "Kowalski",
+    "BirthDate": "07.06.1993",
+    "Email": "jkow@gmail.com",
+    "Pesel": "50080945157"
+  }
+]

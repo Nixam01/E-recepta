@@ -1,0 +1,24 @@
+[
+  {
+    "Id": "b7aa0601-2d7d-4ae8-90d0-e05d3f318026",
+    "DateCreated": "06.07.2020",
+    "DateValidThrough": "03.07.2023",
+    "DoctorId": "a0d64232-7e72-4bff-93ff-0ca03ab083ed",
+    "PatientId": "5064ac01-fbff-478c-b52a-894583450d91",
+    "Content": {
+      "05b028dd-ed69-4b05-9374-e44dd07f3f04": "100 mg",
+      "02726ff0-b99b-4a49-b6c8-ca0fef72c52c": "2 g"
+    }
+  },
+  {
+    "Id": "2c94adb5-4b3c-43a4-b6c2-aebfeb514824",
+    "DateCreated": "02.01.2020",
+    "DateValidThrough": "04.05.2023",
+    "DoctorId": "31ec96a9-e736-4e86-b35b-a5b91b1abf2b",
+    "PatientId": "dfda9b96-780c-4ae5-9baf-07eb7bc4a2c1",
+    "Content": {
+      "ce166e68-76c1-4839-b2af-7274888da53c": "30 mg",
+      "05b028dd-ed69-4b05-9374-e44dd07f3f04": "100 mg"
+    }
+  }
+]

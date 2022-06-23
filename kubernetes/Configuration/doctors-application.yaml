@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doctors-application-deployment
+  labels:
+    app: doctors-application
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: doctors-application
+  template:
+    metadata:
+      labels:
+        app: doctors-application
+    spec:
+      containers:
+      - name: doctors-application
+        image: uaimpw/doctor-application-microservice	
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_URLS
+          value: http://+
+        - name: AppConfig__PrescriptionDataBaseUrl
+          valueFrom:
+            configMapKeyRef: 
+              name: app-configmap
+              key: prescriptions-data_url
+        - name: AppConfig__PatientDataBaseUrl
+          valueFrom:
+            configMapKeyRef: 
+              name: app-configmap
+              key: patients-data_url
+        - name: AppConfig__DoctorDataBaseUrl
+          valueFrom:
+            configMapKeyRef: 
+              name: app-configmap
+              key: doctors-data_url
+        - name: AppConfig__DrugDataBaseUrl
+          valueFrom:
+            configMapKeyRef: 
+              name: app-configmap
+              key: drugs-data_url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: doctors-application-microservice
+spec:
+  selector:
+    app: doctors-application
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30005

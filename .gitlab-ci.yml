@@ -1,0 +1,136 @@
+stages:
+  - buildUiPatientApp
+  - testUiPatientApp
+  - buildUiDoctorApp
+  # - testUiDoctorApp
+  - docker
+  - dockerCompose
+  - kubernetes
+
+buildUiPatientApp:
+  stage: buildUiPatientApp
+  before_script:
+  # Stopping services that may be running on necessary ports
+    - cd shell
+    - .\stopSystem.bat
+    - cd ..\Microservices\UiPatientApp\UiPatientApp
+  script:
+    - dotnet restore
+    - dotnet build -c Debug
+    - dotnet build -c Release
+  tags:
+    - shellPK
+
+testUiPatientApp:
+  stage: testUiPatientApp
+  before_script:
+  # Starting necessary microservices
+    - cd Microservices\doctorsdatamicroservice\doctorsdatamicroservice
+    - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5024/;https://localhost:7024/"}'
+    - cd ..\..\drugsdatamicroservice\drugsdatamicroservice
+    - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5187/;https://localhost:7187/"}'
+    - cd ..\..\patientdatamicroservice\patientdatamicroservice
+    - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5043/;https://localhost:7043/"}'
+    - cd ..\..\prescriptiondatamicroservice\prescriptiondatamicroservice
+    - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5053/;https://localhost:7053/"}'
+    - cd ..\..\patientapplicationmicroservice\patientapplicationmicroservice
+    - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5243/;https://localhost:7243/"}'
+    - cd ..\..\UiPatientApp\Tests
+  script:
+    - dotnet restore
+    - dotnet build -c debug
+    - dotnet test
+    - npx kill-port 5024
+    - npx kill-port 5043
+    - npx kill-port 5053
+    - npx kill-port 5187
+    - npx kill-port 5204
+    - npx kill-port 5243
+    - npx kill-port 5263
+  tags:
+    - shellPK
+
+buildUiDoctorApp:
+  stage: buildUiDoctorApp
+  before_script:
+  # Stopping services that may be running on necessary ports
+    - cd shell
+    - .\stopSystem.bat
+    - cd ..\Microservices\UiDoctorApp\UiDoctorApp
+  script:
+    - dotnet restore
+    - dotnet build -c Debug
+    - dotnet build -c Release
+  tags:
+    - shellPK
+
+# testUiDoctorApp:
+#   stage: testUiDoctorApp
+#   before_script:
+#   # Starting necessary microservices
+#     - cd Microservices\doctorsdatamicroservice\doctorsdatamicroservice
+#     - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5024/;https://localhost:7024/"}'
+#     - cd ..\..\drugsdatamicroservice\drugsdatamicroservice
+#     - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5187/;https://localhost:7187/"}'
+#     - cd ..\..\patientdatamicroservice\patientdatamicroservice
+#     - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5043/;https://localhost:7043/"}'
+#     - cd ..\..\prescriptiondatamicroservice\prescriptiondatamicroservice
+#     - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5053/;https://localhost:7053/"}'
+#     - cd ..\..\patientapplicationmicroservice\patientapplicationmicroservice
+#     - invoke-expression 'cmd /c start powershell -command {dotnet run --urls="http://localhost:5243/;https://localhost:7243/"}'
+#     - cd ..\..\UiDoctorApp\Tests
+#   script:
+#     - dotnet restore
+#     - dotnet build -c debug
+#     - dotnet test
+#     - npx kill-port 5024
+#     - npx kill-port 5043
+#     - npx kill-port 5053
+#     - npx kill-port 5187
+#     - npx kill-port 5204
+#     - npx kill-port 5243
+#     - npx kill-port 5169
+#   tags:
+#     - shellPK
+
+docker:
+  stage: docker
+  before_script:
+    - cd docker
+    - docker login -u uaimpw -p $DOCKER_PASSWORD
+  script:
+    - .\dockerBuildPushDoctorsData.bat
+    - .\dockerBuildPushPatientsData.bat
+    - .\dockerBuildPushDrugsData.bat
+    - .\dockerBuildPushPrescriptionsData.bat
+    - .\dockerBuildPushDoctorsApplication.bat
+    - .\dockerBuildPushPatientsApplication.bat
+    - .\dockerBuildPushPatientsClientApplication.bat
+    - .\dockerBuildPushDoctorsClientApplication.bat
+  tags:
+    - shellPK
+
+dockerCompose:
+  stage: dockerCompose
+  before_script:
+    - cd docker-compose
+  script:
+    - docker ps
+    - docker-compose up -d
+    - docker ps
+    - docker-compose stop
+    - docker-compose down
+    - docker ps
+  tags:
+    - shellPK
+
+kubernetes:
+  stage: kubernetes
+  before_script:
+    - cd kubernetes
+  script:
+    - .\Utils\k8s_startSystem.bat
+    - .\Utils\k8s_showCluster.bat
+    - .\Utils\k8s_stopSystem.bat
+  tags:
+    - shellPK

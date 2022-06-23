@@ -1,0 +1,138 @@
+version: "3.9"
+
+networks:
+  internal-network:
+
+services:
+# Data services
+  doctors-data-microservice:
+    container_name: "doctors-data-microservice"
+    image: "uaimpw/doctors-data-microservice"
+    ports:
+      - "5024:80"
+    environment:
+        ASPNETCORE_URLS: "http://+"
+        ASPNETCORE_ENVIRONMENT: "Development"
+    networks:
+      - "internal-network"
+    restart: on-failure
+    deploy:
+      replicas: 1
+  
+  patients-data-microservice:
+    container_name: "patients-data-microservice"
+    image: "uaimpw/patient-data-microservice"
+    ports:
+      - "5043:80"
+    environment:
+        ASPNETCORE_URLS: "http://+"
+        ASPNETCORE_ENVIRONMENT: "Development"
+    networks:
+      - "internal-network"
+    restart: on-failure
+    deploy:
+      replicas: 1
+
+  drugs-data-microservice:
+    container_name: "drugs-data-microservice"
+    image: "uaimpw/drugs-data-microservice"
+    ports:
+      - "5187:80"
+    environment:
+        ASPNETCORE_URLS: "http://+"
+        ASPNETCORE_ENVIRONMENT: "Development"
+    networks:
+      - "internal-network"
+    restart: on-failure
+    deploy:
+      replicas: 1
+
+  prescriptions-data-microservice:
+    container_name: "prescriptions-data-microservice"
+    image: "uaimpw/prescription-data-microservice"
+    ports:
+      - "5053:80"
+    environment:
+        ASPNETCORE_URLS: "http://+"
+        ASPNETCORE_ENVIRONMENT: "Development"
+    networks:
+      - "internal-network"
+    restart: on-failure
+    deploy:
+      replicas: 1
+
+# Application Services
+  doctors-application-microservice:
+    container_name: "doctors-application-microservice"
+    image: "uaimpw/doctor-application-microservice"
+    ports:
+      - "5204:80"
+    environment:
+      AppConfig__PatientDataBaseUrl: "http://patients-data-microservice"
+      AppConfig__DoctorDataBaseUrl: "http://doctors-data-microservice"
+      AppConfig__DrugDataBaseUrl: "http://drugs-data-microservice"
+      AppConfig__PrescriptionDataBaseUrl: "http://prescriptions-data-microservice"
+      ASPNETCORE_URLS: "http://+"
+    networks:
+      - "internal-network"
+    restart: on-failure
+    depends_on:
+      - "doctors-data-microservice"
+      - "patients-data-microservice"
+      - "drugs-data-microservice"
+      - "prescriptions-data-microservice"
+    deploy:
+      replicas: 1
+
+  patients-application-microservice:
+    container_name: "patients-application-microservice"
+    image: "uaimpw/patient-application-microservice"
+    ports:
+      - "5243:80"
+    environment:
+      AppConfig__PatientDataBaseUrl: "http://patients-data-microservice"
+      AppConfig__DoctorDataBaseUrl: "http://doctors-data-microservice"
+      AppConfig__DrugDataBaseUrl: "http://drugs-data-microservice"
+      AppConfig__PrescriptionDataBaseUrl: "http://prescriptions-data-microservice"
+      ASPNETCORE_URLS: "http://+"
+    networks:
+      - "internal-network"
+    restart: on-failure
+    depends_on:
+      - "doctors-data-microservice"
+      - "patients-data-microservice"
+      - "drugs-data-microservice"
+      - "prescriptions-data-microservice"
+    deploy:
+      replicas: 1
+
+# Client applications      
+  patients-client-application-microservice:
+    container_name: "patients-client-application-microservice"
+    image: "uaimpw/patient-client-application-http"
+    ports:
+      - "5263:80"
+    environment:
+      ASPNETCORE_URLS: "http://+"
+    networks:
+      - "internal-network"
+    restart: on-failure
+    depends_on:
+      - "patients-application-microservice"
+    deploy:
+      replicas: 1
+      
+  doctors-client-application-microservice:
+    container_name: "doctors-client-application-microservice"
+    image: "uaimpw/doctor-client-application-http"
+    ports:
+      - "5169:80"
+    environment:
+      ASPNETCORE_URLS: "http://+"
+    networks:
+      - "internal-network"
+    restart: on-failure
+    depends_on:
+      - "doctors-application-microservice"
+    deploy:
+      replicas: 1 

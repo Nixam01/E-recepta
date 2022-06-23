@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-configmap
+data:
+  doctors-data_url: http://doctors-data-service:80
+  patients-data_url: http://patients-data-service:80
+  drugs-data_url: http://drugs-data-service:80
+  prescriptions-data_url: http://prescriptions-data-service:80

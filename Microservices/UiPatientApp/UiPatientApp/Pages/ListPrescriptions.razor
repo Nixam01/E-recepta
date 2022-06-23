@@ -1,0 +1,36 @@
+﻿@page "/listprescriptions"
+@inject IController controller
+@inject IModel model
+
+<h5>Show Prescriptions:</h5>
+<input name="pesel" class="text-box single-line" @bind="model.SearchText" style="width: 200px" />
+<button name="Click to show" class="btn btn-secondary" @onclick="controller.SearchPrescriptionsAsync">Search</button>
+<h5 style="margin: 4px 0px 4px 0px">Drugs</h5>
+
+<table>
+    <tr>
+        <th>Prescription Id</th>
+        <th>From</th>
+        <th>Expiration Date</th>
+        <th>Doctor</th>
+        <th>Patient</th>
+        <th>Drug : Dose</th>
+    </tr>
+    @foreach(var p in model.PrescriptionList)
+    {
+        <tr>
+            <td>@p.Id</td>
+            <td>@p.DateCreated</td>
+            <td>@p.DateValidThrough</td>
+            <td>@p.Doctor.FirstName @p.Doctor.LastName</td>
+            <td>@p.Patient.FirstName @p.Patient.LastName</td>
+            <td>
+                @foreach (KeyValuePair<string, string> dictValue in p.Content)
+                {
+                    <b>@dictValue.Key : @dictValue.Value</b> <br />
+                }
+            </td>
+        </tr>
+    }
+</table>
+

@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "346a50da-db13-4b2b-a2aa-dca19a585312",
+    "FirstName": "Ben",
+    "LastName": "Williams",
+    "BirthDate": "10.10.1970",
+    "Email": "bwilliams@gmail.com",
+    "DoctorSpecialisation": "Therapist"
+  },
+  {
+    "Id": "a0d64232-7e72-4bff-93ff-0ca03ab083ed",
+    "FirstName": "Ann",
+    "LastName": "Johns",
+    "BirthDate": "05.03.1980",
+    "Email": "ajohns@gmail.com",
+    "DoctorSpecialisation": "Ophthalmologist"
+  },
+  {
+    "Id": "31ec96a9-e736-4e86-b35b-a5b91b1abf2b",
+    "FirstName": "Sam",
+    "LastName": "Smith",
+    "BirthDate": "02.09.1965",
+    "Email": "ssmith@gmail.com",
+    "DoctorSpecialisation": "Pharmacist"
+  }
+]

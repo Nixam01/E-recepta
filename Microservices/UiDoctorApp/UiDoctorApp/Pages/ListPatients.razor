@@ -1,0 +1,27 @@
+﻿@page "/listpatients"
+@inject IController controller
+@inject IModel model
+
+<h5>Show Doctors:</h5>
+<button name="Click to show" class="btn btn-secondary" @onclick="controller.SearchPatientsAsync">Search</button>
+<h5 style="margin: 4px 0px 4px 0px">Doctors</h5>
+
+<table border="5">
+    <tr>
+        <th>Patient FirstName</th>
+        <th>Patient LastName</th>
+        <th>Patient BirthDate</th>
+        <th>Patient Email</th>
+        <th>Pesel</th>
+    </tr>
+    @foreach(var d in model.PatientList)
+    {
+        <tr>
+            <td>@d.FirstName</td>
+            <td>@d.LastName</td>
+            <td>@d.BirthDate</td>
+            <td>@d.Email</td>
+            <td>@d.Pesel</td>
+        </tr>
+    }
+</table>
